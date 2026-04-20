@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { 
-  Container, Typography, Box, TextField, Button, Paper, 
+  Container, Typography, Box, TextField, Button, 
   Link as MuiLink, Alert 
 } from '@mui/material';
 import Link from 'next/link';

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, Typography, Fab, Box, Paper } from '@mui/material';
+import { Container, Typography, Box, Paper } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import Link from 'next/link';
 import { getFichas } from '@/lib/actions';

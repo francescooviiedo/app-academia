@@ -135,7 +135,7 @@ export async function logSet(fichaId: number, nome: string, peso: number, reps: 
   const today = new Date().toLocaleDateString('en-CA');
 
   // Find session for today
-  let { data: treinos, error: treinoError } = await supabase
+  const { data: treinos, error: treinoError } = await supabase
     .from('historico_treinos')
     .select('id')
     .eq('user_id', user.id)
@@ -176,7 +176,7 @@ export async function finishWorkout(fichaId: number) {
   const today = new Date().toLocaleDateString('en-CA');
 
   // 1. Find or create session
-  let { data: treinos } = await supabase
+  const { data: treinos } = await supabase
     .from('historico_treinos')
     .select('id')
     .eq('user_id', user.id)

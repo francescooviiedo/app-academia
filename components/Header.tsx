@@ -1,17 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import { Box, Typography, IconButton } from '@mui/material';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { signOut } from '@/app/auth/actions';
-
-import Avatar from '@mui/material/Avatar';
+import { Box, Typography, Avatar } from '@mui/material';
 
 export default function Header({ 
-  title, 
   rightAction 
 }: { 
-  title?: string, 
   rightAction?: React.ReactNode 
 }) {
   return (

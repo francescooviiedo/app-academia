@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { 
-  Container, Typography, Box, TextField, Button, Paper, 
-  Link as MuiLink, Alert 
+  Container, Typography, Box, TextField, Button, Alert 
 } from '@mui/material';
-import Link from 'next/link';
 import { signup } from '../actions';
 
 export default async function RegisterPage({

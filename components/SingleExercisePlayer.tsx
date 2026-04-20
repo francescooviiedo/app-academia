@@ -6,8 +6,6 @@ import {
   Box, Typography, Button, Paper, TextField, 
   CircularProgress
 } from '@mui/material';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
 import { updateExercicioDetails, logSet } from '@/lib/actions';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
@@ -102,8 +100,11 @@ export default function SingleExercisePlayer({
         setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
       }, 1000);
     } else if (isActive && timeLeft === 0) {
-      setIsActive(false);
-      handleTimerEnd();
+      const timerEnd = () => {
+        setIsActive(false);
+        handleTimerEnd();
+      };
+      timerEnd();
     }
     return () => clearInterval(interval);
   }, [isActive, timeLeft, handleTimerEnd]);
