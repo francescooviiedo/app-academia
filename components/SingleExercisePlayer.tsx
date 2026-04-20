@@ -55,22 +55,29 @@ export default function SingleExercisePlayer({
     console.log("Notification status:", "Notification" in window ? Notification.permission : "Not supported");
     
     if ("Notification" in window && Notification.permission === "granted") {
-      console.log("Attempting to show notification...");
-      // Prefer service worker notification for better background support
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.ready.then((registration) => {
-          console.log("Using Service Worker notification");
-          registration.showNotification(title, options).catch(err => console.error("SW Notification Error:", err));
-        }).catch(() => {
-          console.log("SW not ready, falling back to basic notification");
+      console.log("Attempting to show notification (granted)...");
+      try {
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.getRegistration().then((reg) => {
+            if (reg) {
+              console.log("Showing via SW registration");
+              reg.showNotification(title, options);
+            } else {
+              console.log("No SW reg found, showing via constructor");
+              new Notification(title, options);
+            }
+          });
+        } else {
           new Notification(title, options);
-        });
-      } else {
-        console.log("No Service Worker support, using basic notification");
+        }
+      } catch (err) {
+        console.error("Notification trigger failed:", err);
         new Notification(title, options);
       }
-    } else {
-      console.warn("Notifications are not granted or supported.");
+    } else if ("Notification" in window && Notification.permission !== "denied") {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') new Notification(title, options);
+      });
     }
 
     if (audioRef.current) {
