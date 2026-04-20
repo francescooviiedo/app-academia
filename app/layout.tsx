@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Gym Tracker PWA",
+  title: "Gym Tracker",
   description: "Seu companheiro de treino",
   manifest: "/manifest.json",
   appleWebApp: {
@@ -26,6 +26,10 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import theme from '@/lib/theme';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -35,10 +39,13 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={inter.className}>
         <AppRouterCacheProvider>
-          <Box sx={{ pb: 7, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-            {children}
-            <BottomNav />
-          </Box>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Box sx={{ pb: 10, minHeight: '100vh', display: 'flex', flexDirection: 'column', bgcolor: 'background.default' }}>
+              {children}
+              <BottomNav />
+            </Box>
+          </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

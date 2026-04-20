@@ -14,66 +14,60 @@ export default async function RegisterPage({
   const { message } = await searchParams;
 
   return (
-    <Container maxWidth="xs" sx={{ mt: 15 }}>
-      <Paper elevation={0} sx={{ p: 4, borderRadius: 4, bgcolor: 'transparent' }}>
-        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1, textAlign: 'center' }}>
-          Criar Conta
+    <Container maxWidth="xs" sx={{ mt: 10 }}>
+      <Box sx={{ textAlign: 'center', mb: 6 }}>
+        <Typography variant="h3" sx={{ fontWeight: 900, letterSpacing: -1 }}>
+          JOIN <span style={{ color: '#B2FFD6' }}>US</span>
         </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 4, textAlign: 'center' }}>
-          Junte-se à nossa comunidade fitness
+        <Typography variant="body1" color="text.secondary">
+          Start your transformation.
         </Typography>
+      </Box>
 
-        {message && (
-          <Alert severity="error" sx={{ mb: 3 }}>
-            {message}
-          </Alert>
-        )}
+      {message && (
+        <Alert severity="error" sx={{ mb: 3, borderRadius: 4 }}>
+          {message}
+        </Alert>
+      )}
 
-        <Box component="form" action={signup}>
-          <TextField
-            fullWidth
-            label="Email"
-            name="email"
-            type="email"
-            required
-            sx={{ mb: 2 }}
-            variant="outlined"
-          />
-          <TextField
-            fullWidth
-            label="Password"
-            name="password"
-            type="password"
-            required
-            sx={{ mb: 3 }}
-            variant="outlined"
-          />
-          <Button 
-            fullWidth 
-            variant="contained" 
-            type="submit" 
-            size="large"
-            sx={{ 
-              height: 56, 
-              borderRadius: 28, 
-              fontWeight: 'bold', 
-              fontSize: '1.1rem',
-              mb: 3
-            }}
-          >
-            CADASTRAR
-          </Button>
+      <Box component="form" action={signup}>
+        <TextField
+          fullWidth
+          placeholder="Email"
+          name="email"
+          type="email"
+          required
+          sx={{ mb: 2 }}
+        />
+        <TextField
+          fullWidth
+          placeholder="Password"
+          name="password"
+          type="password"
+          required
+          sx={{ mb: 4 }}
+        />
+        <Button 
+          fullWidth 
+          variant="contained" 
+          type="submit" 
+          size="large"
+          sx={{ 
+            height: 64, 
+            borderRadius: 32, 
+            fontWeight: 800, 
+            fontSize: '1.2rem',
+            boxShadow: '0 10px 30px rgba(178, 255, 214, 0.3)',
+            mb: 4
+          }}
+        >
+          SIGN UP
+        </Button>
 
-          <Typography variant="body2" sx={{ textAlign: 'center' }}>
-            Já tem uma conta?{' '}
-            <Link href="/auth/login" passHref style={{ textDecoration: 'none' }}>
-              <MuiLink component="span" sx={{ fontWeight: 'bold' }}>
-                Entrar
-              </MuiLink>
-            </Link>
-          </Typography>
-        </Box>
-      </Paper>
+        <Typography variant="body2" sx={{ textAlign: 'center', color: 'text.secondary' }}>
+          By clicking sign up, you agree to our terms.
+        </Typography>
+      </Box>
     </Container>
   );
 }

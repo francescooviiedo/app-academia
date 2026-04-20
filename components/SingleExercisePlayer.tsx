@@ -113,39 +113,51 @@ export default function SingleExercisePlayer({
     setIsActive(true);
   };
 
+  const handleUpdateDuration = (val: number) => {
+    setTimerDuration(val);
+    if (!isActive) {
+      setTimeLeft(0); // Keeping it at 0 or setting to val? Usually 0 is fine if not running
+    }
+  };
+
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '80vh', gap: 3 }}>
-      <Paper elevation={0} sx={{ p: 4, textAlign: 'center', bgcolor: 'transparent' }}>
-        <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
+    <Box sx={{ pb: 12 }}>
+      <Paper 
+        elevation={0} 
+        sx={{ 
+          p: 3, 
+          textAlign: 'center', 
+          bgcolor: '#1A1A1A', 
+          borderRadius: 8,
+          border: '1px solid rgba(178, 255, 214, 0.1)',
+          mb: 3
+        }}
+      >
+        <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: 'primary.main' }}>
           {exercicio.nome}
         </Typography>
-        
-        <Box sx={{ mt: 3, mb: 4 }}>
-          <TextField
-            label="Tempo de Descanso (segundos)"
-            type="number"
-            value={timerDuration}
-            size="small"
-            inputMode="numeric"
-            onChange={(e) => setTimerDuration(parseInt(e.target.value) || 0)}
-            sx={{ maxWidth: 200 }}
-          />
-        </Box>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+          {reps} reps • {peso}kg
+        </Typography>
 
-        <Box sx={{ position: 'relative', display: 'inline-flex', mb: 4 }}>
+        <Box sx={{ position: 'relative', display: 'inline-flex', mb: 3 }}>
           <CircularProgress 
             variant="determinate" 
             value={timeLeft > 0 ? (timeLeft / timerDuration) * 100 : 0} 
-            size={220}
-            thickness={2}
+            size={160}
+            thickness={4}
+            sx={{ 
+              color: 'primary.main',
+              '& .MuiCircularProgress-circle': { strokeLinecap: 'round' }
+            }}
           />
           <Box sx={{
             top: 0, left: 0, bottom: 0, right: 0,
             position: 'absolute', display: 'flex',
             alignItems: 'center', justifyContent: 'center',
           }}>
-            <Typography variant="h2" component="div" sx={{ fontWeight: 'light' }}>
-              {timeLeft > 0 ? timeLeft : 'Rest'}
+            <Typography variant="h3" sx={{ fontWeight: 800 }}>
+              {timeLeft > 0 ? timeLeft : timerDuration}
             </Typography>
           </Box>
         </Box>
@@ -155,56 +167,64 @@ export default function SingleExercisePlayer({
             <Button 
               variant="contained" 
               size="large" 
-              startIcon={<PlayArrowIcon />}
               onClick={startTimer}
-              sx={{ borderRadius: 28, px: 6, py: 1.5 }}
+              sx={{ borderRadius: 32, px: 4, py: 1.5, fontWeight: 800, minWidth: 160 }}
             >
-              Iniciar Descanso
+              START REST
             </Button>
           ) : (
             <Button 
               variant="outlined" 
               size="large" 
               onClick={() => setIsActive(!isActive)}
-              sx={{ borderRadius: 28, px: 4 }}
+              sx={{ borderRadius: 32, px: 4, py: 1.5, fontWeight: 800 }}
             >
-              {isActive ? <PauseIcon /> : 'Continuar'}
+              {isActive ? 'PAUSE' : 'RESUME'}
             </Button>
           )}
         </Box>
       </Paper>
 
-      <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 4, boxShadow: 3 }}>
-        <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+      <Paper elevation={0} sx={{ p: 3, bgcolor: '#1A1A1A', borderRadius: 6 }}>
+        <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>Settings</Typography>
+        <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
           <TextField
-            label="Peso (kg)"
+            label="Weight (kg)"
             type="number"
             value={peso}
-            size="small"
-            inputMode="numeric"
             onChange={(e) => handleUpdateDetails(parseFloat(e.target.value) || 0, reps)}
             fullWidth
+            size="small"
           />
           <TextField
-            label="Reps / Séries"
+            label="Reps"
             type="number"
             value={reps}
-            size="small"
-            inputMode="numeric"
             onChange={(e) => handleUpdateDetails(peso, parseInt(e.target.value) || 0)}
             fullWidth
+            size="small"
           />
         </Box>
         
+        <TextField
+          label="Rest Time (s)"
+          type="number"
+          value={timerDuration}
+          onChange={(e) => handleUpdateDuration(parseInt(e.target.value) || 0)}
+          fullWidth
+          size="small"
+          sx={{ mb: 2 }}
+        />
+
         <Button 
           variant="text" 
           fullWidth
           onClick={() => router.back()}
-          sx={{ color: 'text.secondary', fontWeight: 'bold' }}
+          sx={{ color: 'primary.main', fontWeight: 800 }}
         >
-          VOLTAR PARA A FICHA
+          FINISH EXERCISE
         </Button>
-      </Box>
+      </Paper>
     </Box>
   );
 }

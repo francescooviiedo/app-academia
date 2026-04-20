@@ -1,32 +1,66 @@
 'use client';
 
 import * as React from 'react';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import Paper from '@mui/material/Paper';
+import { BottomNavigation, BottomNavigationAction, Paper, Box } from '@mui/material';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useRouter, usePathname } from 'next/navigation';
+import { signOut } from '@/app/auth/actions';
 
 export default function BottomNav() {
   const router = useRouter();
   const pathname = usePathname();
-  const [value, setValue] = React.useState(pathname === '/metricas' ? 1 : 0);
+  const [value, setValue] = React.useState(pathname === '/metricas' ? 1 : (pathname === '/' ? 0 : -1));
 
   return (
-    <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-          if (newValue === 0) router.push('/');
-          else router.push('/metricas');
-        }}
+    <Box sx={{ 
+      position: 'fixed', 
+      bottom: 20, 
+      left: '2%', 
+      right: '2%', 
+      zIndex: 1000 
+    }}>
+      <Paper 
+        sx={{ 
+          borderRadius: '40px', 
+          overflow: 'hidden',
+          bgcolor: 'primary.main', // Mint green
+          boxShadow: '0 8px 32px rgba(178, 255, 214, 0.3)',
+          mx: 'auto',
+          maxWidth: 400
+        }} 
+        elevation={0}
       >
-        <BottomNavigationAction label="Treinos" icon={<FitnessCenterIcon />} />
-        <BottomNavigationAction label="Métricas" icon={<BarChartIcon />} />
-      </BottomNavigation>
-    </Paper>
+        <BottomNavigation
+          showLabels={false}
+          value={value}
+          onChange={(event, newValue) => {
+            if (newValue === 2) {
+              signOut();
+              return;
+            }
+            setValue(newValue);
+            if (newValue === 0) router.push('/');
+            else if (newValue === 1) router.push('/metricas');
+          }}
+          sx={{ 
+            bgcolor: 'transparent',
+            height: 64,
+            '& .MuiBottomNavigationAction-root': {
+              color: 'rgba(0, 0, 0, 0.4)',
+              minWidth: 0,
+              '&.Mui-selected': {
+                color: '#000000',
+              },
+            },
+          }}
+        >
+          <BottomNavigationAction icon={<FitnessCenterIcon />} />
+          <BottomNavigationAction icon={<BarChartIcon />} />
+          <BottomNavigationAction icon={<LogoutIcon />} />
+        </BottomNavigation>
+      </Paper>
+    </Box>
   );
 }
