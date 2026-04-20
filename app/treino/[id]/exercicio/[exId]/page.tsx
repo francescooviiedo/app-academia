@@ -4,7 +4,7 @@ import { getExercicio, getFichas, getLoggedSetsCount } from '@/lib/actions';
 import SingleExercisePlayer from '@/components/SingleExercisePlayer';
 import { redirect } from 'next/navigation';
 
-export default async function PaginaExercicio({ params }: { params: { id: string, exId: string } }) {
+export default async function PaginaExercicio({ params }: { params: Promise<{ id: string, exId: string }> }) {
   const { id, exId } = await params;
   const fichaId = parseInt(id);
   

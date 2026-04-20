@@ -10,14 +10,14 @@ import AddIcon from '@mui/icons-material/Add';
 import Link from 'next/link';
 import { getFichas } from '@/lib/actions';
 
+import Header from '@/components/Header';
+
 export default async function Home() {
   const fichas = await getFichas();
 
   return (
     <Container sx={{ py: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
-        Suas Fichas
-      </Typography>
+      <Header title="Suas Fichas" />
       
       {fichas.length === 0 ? (
         <Typography variant="body1" color="text.secondary">

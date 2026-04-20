@@ -6,14 +6,14 @@ import CardContent from '@mui/material/CardContent';
 import Box from '@mui/material/Box';
 import { getHistoricoSemanal } from '@/lib/actions';
 
+import Header from '@/components/Header';
+
 export default async function Metricas() {
   const historico = await getHistoricoSemanal();
 
   return (
     <Container sx={{ py: 4 }}>
-      <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
-        Suas Métricas
-      </Typography>
+      <Header title="Suas Métricas" />
 
       <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>
         Atividade Semanal

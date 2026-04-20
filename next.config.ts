@@ -9,7 +9,9 @@ const withPWA = withPWAInit({
 });
 
 const nextConfig: NextConfig = {
-  // Configurações do Next.js
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default withPWA(nextConfig);

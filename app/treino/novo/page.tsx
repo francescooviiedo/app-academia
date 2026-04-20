@@ -85,7 +85,7 @@ export default function NovaFicha() {
                 label="Reps"
                 value={ex.reps}
                 inputMode="numeric"
-                onChange={(e) => updateExercicio(index, 'reps', parseInt(e.target.value))}
+                onChange={(e) => updateExercicio(index, 'reps', parseInt(e.target.value) || 0)}
                 sx={{ flex: 1 }}
               />
               <TextField
@@ -93,7 +93,7 @@ export default function NovaFicha() {
                 label="Peso"
                 value={ex.peso}
                 inputMode="decimal"
-                onChange={(e) => updateExercicio(index, 'peso', parseFloat(e.target.value))}
+                onChange={(e) => updateExercicio(index, 'peso', parseFloat(e.target.value) || 0)}
                 sx={{ flex: 1 }}
               />
               <TextField
@@ -101,7 +101,7 @@ export default function NovaFicha() {
                 label="Desc."
                 value={ex.timer}
                 inputMode="numeric"
-                onChange={(e) => updateExercicio(index, 'timer', parseInt(e.target.value))}
+                onChange={(e) => updateExercicio(index, 'timer', parseInt(e.target.value) || 0)}
                 sx={{ flex: 1 }}
               />
             </Box>

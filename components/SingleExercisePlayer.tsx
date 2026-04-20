@@ -46,13 +46,39 @@ export default function SingleExercisePlayer({
   }, [exercicio.ficha_id, exercicio.id, exercicio.nome, exercicio.repeticoes_alvo, peso, reps]);
 
   const handleTimerEnd = useCallback(() => {
+    const title = "Descanso Finalizado!";
+    const options = {
+      body: `Símbora! Próxima série de ${exercicio.nome}`,
+      icon: "/icons/icon-192x192.png",
+      vibrate: [200, 100, 200],
+      badge: "/icons/icon-192x192.png",
+    };
+
+    console.log("Notification status:", "Notification" in window ? Notification.permission : "Not supported");
+    
     if ("Notification" in window && Notification.permission === "granted") {
-      new Notification("Descanso Finalizado!", {
-        body: `Símbora! Próxima série de ${exercicio.nome}`,
-        icon: "/icons/icon-192x192.png"
-      });
+      console.log("Attempting to show notification...");
+      // Prefer service worker notification for better background support
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.ready.then((registration) => {
+          console.log("Using Service Worker notification");
+          registration.showNotification(title, options).catch(err => console.error("SW Notification Error:", err));
+        }).catch(() => {
+          console.log("SW not ready, falling back to basic notification");
+          new Notification(title, options);
+        });
+      } else {
+        console.log("No Service Worker support, using basic notification");
+        new Notification(title, options);
+      }
+    } else {
+      console.warn("Notifications are not granted or supported.");
     }
-    audioRef.current?.play().catch(() => {});
+
+    if (audioRef.current) {
+      console.log("Playing audio...");
+      audioRef.current.play().catch(err => console.error("Audio Play Error:", err));
+    }
     saveAndLog();
   }, [exercicio.nome, saveAndLog]);
 
@@ -73,15 +99,11 @@ export default function SingleExercisePlayer({
     let interval: NodeJS.Timeout;
     if (isActive && timeLeft > 0) {
       interval = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            setIsActive(false);
-            handleTimerEnd();
-            return 0;
-          }
-          return prev - 1;
-        });
+        setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
       }, 1000);
+    } else if (isActive && timeLeft === 0) {
+      setIsActive(false);
+      handleTimerEnd();
     }
     return () => clearInterval(interval);
   }, [isActive, timeLeft, handleTimerEnd]);

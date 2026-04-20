@@ -10,7 +10,7 @@ import { getExercicios, getFichas } from '@/lib/actions';
 import ClientFinishButton from '@/components/ClientFinishButton';
 import { redirect } from 'next/navigation';
 
-export default async function DetalhesTreino({ params }: { params: { id: string } }) {
+export default async function DetalhesTreino({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const fichaId = parseInt(id);
   const exercicios = await getExercicios(fichaId);
