@@ -43,7 +43,7 @@ export default function SingleExercisePlayer({
     setReps(nextSet);
   }, [exercicio.ficha_id, exercicio.id, exercicio.nome, exercicio.repeticoes_alvo, peso, reps]);
 
-  const handleTimerEnd = useCallback(() => {
+  const handleTimerEnd = useCallback(async () => {
     const title = "Descanso Finalizado!";
     const options = {
       body: `Símbora! Próxima série de ${exercicio.nome}`,
@@ -84,7 +84,7 @@ export default function SingleExercisePlayer({
       console.log("Playing audio...");
       audioRef.current.play().catch(err => console.error("Audio Play Error:", err));
     }
-    saveAndLog();
+    await saveAndLog();
   }, [exercicio.nome, saveAndLog]);
 
   const handleUpdateDetails = useCallback(async (newPeso: number, newReps: number) => {
@@ -100,21 +100,34 @@ export default function SingleExercisePlayer({
     audioRef.current = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
   }, []);
 
+  const timerEndRef = useRef<number | null>(null);
+
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (isActive && timeLeft > 0) {
+    if (isActive) {
+      if (!timerEndRef.current) {
+        timerEndRef.current = Date.now() + timeLeft * 1000;
+      }
+
       interval = setInterval(() => {
-        setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
-      }, 1000);
-    } else if (isActive && timeLeft === 0) {
-      const timerEnd = () => {
-        setIsActive(false);
-        handleTimerEnd();
-      };
-      timerEnd();
+        const now = Date.now();
+        const remaining = Math.max(0, Math.ceil((timerEndRef.current! - now) / 1000));
+        
+        if (remaining <= 0) {
+          setIsActive(false);
+          timerEndRef.current = null;
+          setTimeLeft(0);
+          handleTimerEnd();
+          clearInterval(interval);
+        } else {
+          setTimeLeft(remaining);
+        }
+      }, 500);
+    } else {
+      timerEndRef.current = null;
     }
     return () => clearInterval(interval);
-  }, [isActive, timeLeft, handleTimerEnd]);
+  }, [isActive, handleTimerEnd]);
 
   const startTimer = () => {
     setTimeLeft(timerDuration);
@@ -145,7 +158,7 @@ export default function SingleExercisePlayer({
           {exercicio.nome}
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-          {reps} reps • {peso}kg
+          {reps} Séries • {peso}kg
         </Typography>
 
         <Box sx={{ position: 'relative', display: 'inline-flex', mb: 3 }}>
@@ -205,7 +218,7 @@ export default function SingleExercisePlayer({
             size="small"
           />
           <TextField
-            label="Reps"
+            label="Séries"
             type="number"
             value={reps}
             onChange={(e) => handleUpdateDetails(peso, parseInt(e.target.value) || 0)}

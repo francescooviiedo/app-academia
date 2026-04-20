@@ -15,7 +15,6 @@ import { useRouter } from 'next/navigation';
 
 interface ExercicioInput {
   nome: string;
-  reps: number;
   peso: number;
   timer: number;
 }
@@ -23,10 +22,10 @@ interface ExercicioInput {
 export default function NovaFicha() {
   const router = useRouter();
   const [nome, setNome] = useState('');
-  const [exercicios, setExercicios] = useState<ExercicioInput[]>([{ nome: '', reps: 10, peso: 0, timer: 60 }]);
+  const [exercicios, setExercicios] = useState<ExercicioInput[]>([{ nome: '', peso: 0, timer: 60 }]);
 
   const addExercicio = () => {
-    setExercicios([...exercicios, { nome: '', reps: 10, peso: 0, timer: 60 }]);
+    setExercicios([...exercicios, { nome: '', peso: 0, timer: 60 }]);
   };
 
   const removeExercicio = (index: number) => {
@@ -46,8 +45,8 @@ export default function NovaFicha() {
   };
 
   return (
-    <Container sx={{ py: 4 }}>
-      <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold' }}>
+    <Container sx={{ py: 4, pb: 12 }}>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 900, mb: 4 }}>
         Nova Ficha de Treino
       </Typography>
       
@@ -55,42 +54,37 @@ export default function NovaFicha() {
         <TextField
           fullWidth
           label="Nome da Ficha"
+          variant="filled"
           value={nome}
           onChange={(e) => setNome(e.target.value)}
           required
-          sx={{ mb: 4 }}
+          sx={{ mb: 4, bgcolor: '#1A1A1A', borderRadius: 2 }}
         />
 
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h6" sx={{ mb: 3, fontWeight: 'bold' }}>
           Exercícios
         </Typography>
 
         {exercicios.map((ex, index) => (
-          <Box key={index} sx={{ mb: 3, p: 2, border: '1px solid #ddd', borderRadius: 2 }}>
-            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+          <Box key={index} sx={{ mb: 3, p: 3, bgcolor: '#111', borderRadius: 4, border: '1px solid rgba(255,255,255,0.05)' }}>
+            <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
               <TextField
                 fullWidth
                 label="Nome"
+                variant="standard"
                 value={ex.nome}
                 onChange={(e) => updateExercicio(index, 'nome', e.target.value)}
                 required
               />
-              <IconButton onClick={() => removeExercicio(index)} color="error">
+              <IconButton onClick={() => removeExercicio(index)} sx={{ color: '#FF5252' }}>
                 <DeleteIcon />
               </IconButton>
             </Box>
             <Box sx={{ display: 'flex', gap: 2 }}>
               <TextField
                 type="number"
-                label="Reps"
-                value={ex.reps}
-                inputMode="numeric"
-                onChange={(e) => updateExercicio(index, 'reps', parseInt(e.target.value) || 0)}
-                sx={{ flex: 1 }}
-              />
-              <TextField
-                type="number"
                 label="Peso"
+                variant="standard"
                 value={ex.peso}
                 inputMode="decimal"
                 onChange={(e) => updateExercicio(index, 'peso', parseFloat(e.target.value) || 0)}
@@ -99,6 +93,7 @@ export default function NovaFicha() {
               <TextField
                 type="number"
                 label="Desc."
+                variant="standard"
                 value={ex.timer}
                 inputMode="numeric"
                 onChange={(e) => updateExercicio(index, 'timer', parseInt(e.target.value) || 0)}

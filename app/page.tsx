@@ -4,6 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Link from 'next/link';
 import { getFichas } from '@/lib/actions';
 import Header from '@/components/Header';
+import FichaMenu from '@/components/FichaMenu';
 
 import { IconButton } from '@mui/material';
 
@@ -44,7 +45,7 @@ export default async function Home() {
               href={ficha.ja_realizado ? '#' : `/treino/${ficha.id}`} 
               style={{ 
                 textDecoration: 'none', 
-                pointerEvents: ficha.ja_realizado ? 'none' : 'auto'
+                cursor: ficha.ja_realizado ? 'default' : 'pointer'
               }}
             >
               <Paper 
@@ -52,6 +53,9 @@ export default async function Home() {
                   p: 3,
                   borderRadius: 3, 
                   bgcolor: '#1A1A1A',
+                  opacity: ficha.ja_realizado ? 0.7 : 1,
+                  transition: 'transform 0.2s',
+                  '&:active': { transform: ficha.ja_realizado ? 'none' : 'scale(0.98)' }
                 }}
               >
                 <Box sx={{ 
@@ -59,9 +63,12 @@ export default async function Home() {
                   justifyContent: 'space-between', 
                   alignItems: 'center' 
                 }}>
-                  <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                    {ficha.nome}
-                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                      {ficha.nome}
+                    </Typography>
+                    <FichaMenu id={ficha.id} />
+                  </Box>
                   
                   {ficha.ja_realizado ? (
                     <Box sx={{ 

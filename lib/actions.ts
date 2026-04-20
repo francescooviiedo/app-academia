@@ -18,7 +18,7 @@ export interface Exercicio {
   timer_segundos: number;
 }
 
-export async function createFicha(nome: string, exercicios: { nome: string; reps: number; peso: number; timer: number }[]) {
+export async function createFicha(nome: string, exercicios: { nome: string; peso: number; timer: number }[]) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
@@ -37,7 +37,7 @@ export async function createFicha(nome: string, exercicios: { nome: string; reps
     user_id: user.id,
     ficha_id: fichaId,
     nome: ex.nome,
-    repeticoes_alvo: ex.reps,
+    repeticoes_alvo: 0, // Default to 0 as it's not set during creation anymore
     peso: ex.peso,
     timer_segundos: ex.timer
   }));
@@ -48,6 +48,21 @@ export async function createFicha(nome: string, exercicios: { nome: string; reps
 
   if (exError) throw exError;
 
+  revalidatePath('/');
+}
+
+export async function deleteFicha(id: number) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Unauthorized');
+
+  const { error } = await supabase
+    .from('fichas')
+    .delete()
+    .eq('id', id)
+    .eq('user_id', user.id);
+
+  if (error) throw error;
   revalidatePath('/');
 }
 
